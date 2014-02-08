@@ -72,29 +72,30 @@ module Tick
     
     def self.create(params, &block)
       url  = "https://#{params[:company]}.tickspot.com/api/users"
-    
+      
+      company = params[:company]
       params.delete(:company)
   
       request_manager.GET(url, parameters:params, success:lambda{|operation, result|
         # TODO: Save first and last name
         @current = new
-        @current.company = params[:company]
+        @current.company = company
         @current.email = params[:email]
         @current.password = params[:password]
         block.call(@current) if block
       }, failure:lambda{|operation, error|
         block.call(error) if block
       })
-    
+      
       self
     end
   
     def self.current
-      @current || new if logged_in?
+      @current || (logged_in? ? new : nil)
     end
     
     def self.logged_in?
-      @current && @current.company && @current.email && @current.password
+      (@current && @current.company && @current.email && @current.password) ? true : false
     end
   
   end

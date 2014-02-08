@@ -51,6 +51,7 @@ module Tick
           entry.billed       = entry_node.elementsForName("billed").first.stringValue.boolValue
           entry.budget       = entry_node.elementsForName("budget").first.stringValue.floatValue
           entry.client_name  = entry_node.elementsForName("client_name").first.stringValue
+          entry.created_at   = datetime_from_string(entry_node.elementsForName("created_at").first.stringValue)
           entry.date         = date_from_string(entry_node.elementsForName("date").first.stringValue)
           entry.hours        = entry_node.elementsForName("hours").first.stringValue.floatValue
           entry.notes        = entry_node.elementsForName("notes").first.stringValue
@@ -58,6 +59,7 @@ module Tick
           entry.sum_hours    = entry_node.elementsForName("sum_hours").first.stringValue.floatValue
           entry.task_id      = entry_node.elementsForName("task_id").first.stringValue.intValue
           entry.task_name    = entry_node.elementsForName("task_name").first.stringValue
+          entry.updated_at   = datetime_from_string(entry_node.elementsForName("updated_at").first.stringValue)
           entry.user_email   = entry_node.elementsForName("user_email").first.stringValue
           entry.user_id      = entry_node.elementsForName("user_id").first.stringValue.intValue
           

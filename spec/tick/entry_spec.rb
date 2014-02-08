@@ -65,7 +65,7 @@ describe "Tick::Entry" do
   
   it "should have created and updated at dates" do
     dateFormatter = NSDateFormatter.new
-    dateFormatter.setDateFormat("EE, dd MM yyyy hh:mm:ss zzz")
+    dateFormatter.setDateFormat("EE, dd MMM yyyy HH:mm:ss ZZZ")
     date = dateFormatter.dateFromString("Tue, 07 Oct 2008 14:46:16 -0400")
     @entry.created_at.should.equal date
     @entry.updated_at.should.equal date
