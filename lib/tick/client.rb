@@ -4,11 +4,11 @@ module Tick
     attr_accessor :name
     
     def self.list(options={}, &block)
-      url = "https://#{authentication_controller.company}.tickspot.com/api/clients"
+      url = "https://#{current_session.company}.tickspot.com/api/clients"
       
       params = {
-        email: authentication_controller.email,
-        password: authentication_controller.password
+        email: current_session.email,
+        password: current_session.password
       }.merge!(options)
       
       request_manager.GET(url, parameters:params, success:lambda{|operation, result|
@@ -32,7 +32,7 @@ module Tick
         
         block.call(clients)
       }, failure:lambda{|operation, error|
-        authentication_controller.logout
+        current_session.destroy
         block.call(error)
       })
       

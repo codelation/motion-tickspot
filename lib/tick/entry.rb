@@ -6,11 +6,11 @@ module Tick
                   :task_id, :task_name, :user_email, :user_id
     
     def self.create(options={}, &block)
-      url  = "https://#{authentication_controller.company}.tickspot.com/api/create_entry"
+      url  = "https://#{current_session.company}.tickspot.com/api/create_entry"
       
       params = {
-        email: authentication_controller.email,
-        password: authentication_controller.password
+        email: current_session.email,
+        password: current_session.password
       }.merge!(options)
       
       request_manager.GET(url, parameters:params, success:lambda{|operation, result|
@@ -18,7 +18,7 @@ module Tick
         xml = GDataXMLDocument.alloc.initWithXMLString(result.to_s, error:error)
         block.call(xml)
       }, failure:lambda{|operation, error|
-        authentication_controller.logout
+        current_session.destroy
         block.call(error)
       })
       
@@ -26,11 +26,11 @@ module Tick
     end
     
     def self.list(options={}, &block)
-      url = "https://#{authentication_controller.company}.tickspot.com/api/entries"
+      url = "https://#{current_session.company}.tickspot.com/api/entries"
 
       params = {
-        email: authentication_controller.email,
-        password: authentication_controller.password
+        email: current_session.email,
+        password: current_session.password
       }.merge!(options)
 
       request_manager.GET(url, parameters:params, success:lambda{|operation, result|
@@ -66,7 +66,7 @@ module Tick
 
         block.call(entries)
       }, failure:lambda{|operation, error|
-        authentication_controller.logout
+        current_session.destroy
         block.call(error)
       })
 

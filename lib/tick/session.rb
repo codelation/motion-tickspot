@@ -1,7 +1,7 @@
 module Tick
   
-  class Session
-    attr_accessor :company, :email, :password
+  class Session < Tick::Base
+    attr_accessor :company, :email, :first_name, :last_name, :password
   
     SERVICE_NAME = "Tick Timer"
   
@@ -15,6 +15,13 @@ module Tick
       storage.synchronize
       @company
     end
+    
+    def destroy
+      storage.removeObjectForKey("company")
+      storage.removeObjectForKey("email")
+      SSKeychain.deletePasswordForService(SERVICE_NAME, account:email)
+      self.class.current = nil
+    end
   
     def email
       @email ||= storage.objectForKey("email")
@@ -26,37 +33,27 @@ module Tick
       storage.synchronize
       @email
     end
-  
-    def logged_in?
-      (self.company && self.email && self.password) ? true : false
+    
+    def first_name
+      @first_name ||= storage.objectForKey("first_name")
     end
   
-    def login(company, email, password)
-      url  = "https://#{company}.tickspot.com/api/users"
+    def first_name=(value)
+      @first_name = value
+      storage.setObject(value, forKey:"first_name")
+      storage.synchronize
+      @first_name
+    end
     
-      params = {
-        email: email,
-        password: password
-      }
-    
-      promise = Loco::Promise.new
-  
-      AFMotion::XML.get(url, params) do |result|
-        if result.success?
-          self.company = company
-          self.email = email
-          self.password = password
-          promise.resolve(result.body)
-        elsif result.failure?
-          promise.reject(result.error)
-        end
-      end
-    
-      promise
+    def last_name
+      @last_name ||= storage.objectForKey("last_name")
     end
   
-    def logout
-      SSKeychain.deletePasswordForService(SERVICE_NAME, account:email)
+    def last_name=(value)
+      @last_name = value
+      storage.setObject(value, forKey:"last_name")
+      storage.synchronize
+      @last_name
     end
   
     def password
@@ -72,9 +69,32 @@ module Tick
     def storage
       NSUserDefaults.standardUserDefaults
     end
+    
+    def self.create(params, &block)
+      url  = "https://#{params[:company]}.tickspot.com/api/users"
+    
+      params.delete(:company)
+  
+      request_manager.GET(url, parameters:params, success:lambda{|operation, result|
+        # TODO: Save first and last name
+        @current = new
+        @current.company = params[:company]
+        @current.email = params[:email]
+        @current.password = params[:password]
+        block.call(@current) if block
+      }, failure:lambda{|operation, error|
+        block.call(error) if block
+      })
+    
+      self
+    end
   
     def self.current
-      @instance ||= new
+      @current || new if logged_in?
+    end
+    
+    def self.logged_in?
+      @current && @current.company && @current.email && @current.password
     end
   
   end

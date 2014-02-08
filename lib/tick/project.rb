@@ -6,11 +6,11 @@ module Tick
                   :user_count
     
     def self.list(options={}, &block)
-      url = "https://#{authentication_controller.company}.tickspot.com/api/projects"
+      url = "https://#{current_session.company}.tickspot.com/api/projects"
       
       params = {
-        email: authentication_controller.email,
-        password: authentication_controller.password
+        email: current_session.email,
+        password: current_session.password
       }.merge!(options)
       
       request_manager.GET(url, parameters:params, success:lambda{|operation, result|
@@ -51,7 +51,7 @@ module Tick
         
         block.call(projects)
       }, failure:lambda{|operation, error|
-        authentication_controller.logout
+        current_session.destroy
         block.call(error)
       })
       

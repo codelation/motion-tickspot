@@ -6,7 +6,7 @@ module Tick
   class Base
     attr_accessor :id, :created_at, :updated_at
     
-    def self.authentication_controller
+    def self.current_session
       Tick::Session.current
     end
     

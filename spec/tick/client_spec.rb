@@ -3,9 +3,11 @@ RackMotion.use TickClientStub
 describe "Tick::Client" do
   
   before do
-    Tick::Session.current.company  = "company"
-    Tick::Session.current.email    = "email"
-    Tick::Session.current.password = "password"
+    session = Tick::Session.new
+    session.company  = "company"
+    session.email    = "email"
+    session.password = "password"
+    Tick::Session.instance_variable_set("@current", session)
   end
   
   it "should be defined" do

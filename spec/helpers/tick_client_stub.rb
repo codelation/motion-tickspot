@@ -5,12 +5,16 @@ class TickClientStub
   end
  
   def call(request)
-    if request.URL.absoluteString.start_with? "https://company.tickspot.com/api/clients?"
-      status = 200
-      headers = {
-        "Status" => "200 OK",
-        "Content-Type" => "application/xml; charset=utf-8"
-      }
+    status = 200
+    headers = {
+      "Status" => "200 OK",
+      "Content-Type" => "application/xml; charset=utf-8"
+    }
+    
+    if request.URL.absoluteString.start_with? "https://company.tickspot.com/api/users?"
+      data = File.open("#{NSBundle.mainBundle.resourcePath}/users.xml").read.to_data
+      sleep 0.1
+    elsif request.URL.absoluteString.start_with? "https://company.tickspot.com/api/clients?"
       data = File.open("#{NSBundle.mainBundle.resourcePath}/clients.xml").read.to_data
       sleep 0.1
     else
