@@ -6,8 +6,8 @@ Gem::Specification.new do |spec|
   spec.version       = Tick::VERSION
   spec.authors       = ["Brian Pattison"]
   spec.email         = ["brian@brianpattison.com"]
-  spec.description   = "A RubyMotion wrapper for the tickspot.com API"
-  spec.summary       = "A RubyMotion wrapper for the tickspot.com API"
+  spec.summary       = "A RubyMotion wrapper for the http://tickspot.com API"
+  spec.description   = "Motion Tickspot is a RubyMotion wrapper for accessing the Tick time tracking service using the http://tickspot.com API."
   spec.homepage      = "https://github.com/81designs/motion-tickspot"
   spec.license       = "MIT"
 
