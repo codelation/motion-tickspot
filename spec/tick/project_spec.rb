@@ -3,9 +3,9 @@ RackMotion.use TickProjectStub
 describe "Tick::Project" do
   
   before do
-    Tick::AuthenticationController.instance.company  = "company"
-    Tick::AuthenticationController.instance.email    = "email"
-    Tick::AuthenticationController.instance.password = "password"
+    Tick::Session.current.company  = "company"
+    Tick::Session.current.email    = "email"
+    Tick::Session.current.password = "password"
   end
   
   it "should be defined" do

@@ -7,7 +7,7 @@ module Tick
     attr_accessor :id, :created_at, :updated_at
     
     def self.authentication_controller
-      Tick::AuthenticationController.instance
+      Tick::Session.current
     end
     
   private
