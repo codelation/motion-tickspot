@@ -1,0 +1,6 @@
+includeFiles = "{$includeFiles,.gitignore}"
+excludeInFileChooser = "{$excludeInFileChooser,build,vendor/Pods}"
+excludeInFolderSearch = "{$excludeInFolderSearch,build,vendor/Pods}"
+
+softTabs = true
+tabSize = 2

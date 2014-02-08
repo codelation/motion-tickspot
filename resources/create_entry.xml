@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entry>
+  <id type="integer">77</id>
+  <task_id type="integer">1</task_id>
+  <user_id type="integer">1</user_id>
+  <date type="date">2008-03-17</date>
+  <hours type="float">2.5</hours>
+  <notes>She can't take much more of this Captain</notes>
+  <created_at type="datetime">Tue, 07 Oct 2008 14:46:16 -0400</created_at>
+  <updated_at type="datetime">Tue, 07 Oct 2008 14:46:16 -0400</updated_at>
+  <user_email type="text">scotty@ncc1701.com</user_email>
+  <task>
+    <id type="integer">1</id>
+    <name>Remove converter assembly</name>
+    <position type="integer">1</position>
+    <project_id type="integer">1</project_id>
+    <opened_on type="date">2006-01-01</opened_on>
+    <closed_on type="date"></closed_on>
+    <budget type="float"></budget>
+    <billable type="boolean">true</billable>
+    <total_hours>4.5</total_hours>
+    <user_count>1</user_count>
+  </task>
+  <project>
+    <id type="integer">1</id>
+    <name>Realign dilithium crystals</name>
+    <budget type="float"></budget>
+    <client_id type="integer">1</client_id>
+    <opened_on type="date">2006-01-01</opened_on>
+    <closed_on type="date"></closed_on>
+    <created_at type="datetime">Tue, 07 Oct 2008 14:46:16 -0400</created_at>
+    <updated_at type="datetime">Tue, 07 Oct 2008 14:46:16 -0400</updated_at>
+    <total_hours type="float">10.5</total_hours>
+    <client_name>Starfleet Command</client_name>
+  </project>
+</entry>
