@@ -1,5 +1,6 @@
 # motion-tickspot
 
+[![Build Status](https://travis-ci.org/81designs/motion-tickspot.png)](https://travis-ci.org/81designs/motion-tickspot)
 [![Code Climate](https://codeclimate.com/github/81designs/motion-tickspot.png)](https://codeclimate.com/github/81designs/motion-tickspot)
 
 TODO: Write a gem description
