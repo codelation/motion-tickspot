@@ -13,9 +13,16 @@ module Tick
         password: current_session.password
       }.merge!(options)
       
+      if params[:date].is_a?(NSDate)
+        dateFormatter = NSDateFormatter.new
+        dateFormatter.setDateFormat(Tick::DATE_FORMAT)
+        params[:date] = dateFormatter.stringFromDate(params[:date])
+      end
+      
       request_manager.GET(url, parameters:params, success:lambda{|operation, result|
         error = Pointer.new(:object)
         xml = GDataXMLDocument.alloc.initWithXMLString(result.to_s, error:error)
+        # TODO: Return Tick::Entry object
         block.call(xml)
       }, failure:lambda{|operation, error|
         current_session.destroy

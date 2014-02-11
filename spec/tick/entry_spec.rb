@@ -26,7 +26,14 @@ describe "Tick::Entry" do
     end
     
     wait do
-      @result.is_a?(GDataXMLDocument).should.equal true
+      @result.is_a?(Tick::Entry).should.equal true
+      @result.task_id.should.equal 1
+      @result.hours.should.equal 10
+      dateFormatter = NSDateFormatter.new
+      dateFormatter.setDateFormat("yyyy-MM-dd")
+      date = dateFormatter.dateFromString("2014-01-27")
+      @result.date.is_a?(NSDate).should.equal true
+      @result.date.should.equal date
     end
   end
   
