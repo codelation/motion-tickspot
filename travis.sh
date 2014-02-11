@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
-bundle install &&
-bundle exec rake pod:install &&
+bundle install &>/dev/null &&
+bundle exec rake pod:install &>/dev/null &&
 bundle exec rake clean &&
 bundle exec rake spec &&
 bundle exec rake clean &&
