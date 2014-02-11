@@ -1,5 +1,7 @@
 # motion-tickspot
 
+[![Code Climate](https://codeclimate.com/github/81designs/motion-tickspot.png)](https://codeclimate.com/github/81designs/motion-tickspot)
+
 TODO: Write a gem description
 
 ## Installation
