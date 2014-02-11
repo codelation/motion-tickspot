@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 $:.unshift("/Library/RubyMotion/lib")
-require "motion/project/template/ios"
+
+if ENV["osx"]
+  require "motion/project/template/osx"
+else
+  require "motion/project/template/ios"
+end
+
 require "./lib/motion-tickspot"
 
 begin
