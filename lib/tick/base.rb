@@ -30,6 +30,7 @@ module Tick
   
   class Base
     attr_accessor :id, :created_at, :updated_at
+    attr_reader :api_name, :api_path
     
     def set_properties_from_xml_node(xml_node, properties)
       properties.each do |property|
@@ -39,8 +40,46 @@ module Tick
       end
     end
     
-    def self.current_session
-      Tick::Session.current
+    def self.api_name
+      self.to_s.split('::').last.downcase
+    end
+    
+    def self.api_path
+      "/api/#{api_name}s"
+    end
+    
+    def self.list(options={}, &block)
+      url = "https://#{current_session.company}.tickspot.com#{api_path}"
+      
+      params = {
+        email: current_session.email,
+        password: current_session.password
+      }.merge!(options)
+      
+      request_manager.GET(url, parameters:params, success:lambda{|operation, result|
+        objects = []
+        
+        # Parse XML
+        error = Pointer.new(:object)
+        xml = GDataXMLDocument.alloc.initWithXMLString(result.to_s, error:error)
+        
+        # Create the objects
+        error = Pointer.new(:object)
+        xml_nodes = xml.nodesForXPath("//#{api_name}", error:error)
+        
+        xml_nodes.each do |xml_node|
+          object = new
+          object.set_properties_from_xml_node(xml_node, self::XML_PROPERTIES)
+          objects << object
+        end
+        
+        block.call(objects) if block
+      }, failure:lambda{|operation, error|
+        current_session.destroy
+        block.call(error) if block
+      })
+      
+      self
     end
     
   private
@@ -81,6 +120,10 @@ module Tick
       dateFormatter = NSDateFormatter.new
       dateFormatter.setDateFormat(Tick::DATETIME_FORMAT)
       dateFormatter.dateFromString(string)
+    end
+    
+    def self.current_session
+      Tick::Session.current
     end
   
     def self.request_manager

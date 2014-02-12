@@ -94,6 +94,10 @@ module Tick
       @current || (logged_in? ? new : nil)
     end
     
+    def self.current=(value)
+      @current = value
+    end
+    
     def self.logged_in?
       (@current && @current.company && @current.email && @current.password) ? true : false
     end
