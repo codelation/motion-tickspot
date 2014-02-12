@@ -95,7 +95,7 @@ describe "Tick::Timer" do
     timer = Tick::Timer.new
     timer.time_spans = [7200, 5400, 3600] # 2 hours, 1.5 hours, 1 hour
     timer.time_elapsed_in_seconds.to_i.should.equal 16200
-    timer.time_elapsed_in_hours.should.equal 4.5
+    timer.time_elapsed_in_hours.round(1).should.equal 4.5
   end
   
   it "should have the displayed time as hours and minutes: '04:30'" do

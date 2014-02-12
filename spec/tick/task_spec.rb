@@ -52,7 +52,7 @@ describe "Tick::Task" do
   end
   
   it "should have a budget" do
-    @task.budget.should.equal 50.0
+    @task.budget.round(1).should.equal 50.0
   end
   
   it "should have a billable attribute" do
@@ -60,7 +60,7 @@ describe "Tick::Task" do
   end
   
   it "should have the sum of hours" do
-    @task.sum_hours.should.equal 22.5
+    @task.sum_hours.round(1).should.equal 22.5
   end
   
   it "should have a users count" do

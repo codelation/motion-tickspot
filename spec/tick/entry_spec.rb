@@ -29,7 +29,7 @@ describe "Tick::Entry" do
     wait do
       @result.is_a?(Tick::Entry).should.equal true
       @result.task_id.should.equal 1
-      @result.hours.should.equal 2.5
+      @result.hours.round(1).should.equal 2.5
       dateFormatter = NSDateFormatter.new
       dateFormatter.setDateFormat("yyyy-MM-dd")
       date = dateFormatter.dateFromString("2008-03-17")
@@ -80,7 +80,7 @@ describe "Tick::Entry" do
   end
   
   it "should have hours" do
-    @entry.hours.should.equal 1.00
+    @entry.hours.round(1).should.equal 1.0
   end
   
   it "should have notes" do
@@ -104,11 +104,11 @@ describe "Tick::Entry" do
   end
   
   it "should have the sum of hours" do
-    @entry.sum_hours.should.equal 2.00
+    @entry.sum_hours.round(1).should.equal 2.0
   end
   
   it "should have a budget" do
-    @entry.budget.should.equal 10.00
+    @entry.budget.round(1).should.equal 10.0
   end
   
   it "should have a project name" do

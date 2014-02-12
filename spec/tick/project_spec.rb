@@ -37,7 +37,7 @@ describe "Tick::Project" do
   end
   
   it "should have a budget" do
-    @project.budget.should.equal 50.0
+    @project.budget.round(1).should.equal 50.0
   end
   
   it "should have a client id" do
@@ -68,7 +68,7 @@ describe "Tick::Project" do
   end
   
   it "should have the sum of hours" do
-    @project.sum_hours.should.equal 22.5
+    @project.sum_hours.round(1).should.equal 22.5
   end
   
   it "should have a users count" do
