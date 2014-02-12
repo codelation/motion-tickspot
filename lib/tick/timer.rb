@@ -65,17 +65,19 @@ module Tick
     end
     alias_method :pause, :stop
     
-    def submit!(&block)
+    def submit!(options={}, &block)
       dateFormatter = NSDateFormatter.new
       dateFormatter.setDateFormat(Tick::DATE_FORMAT)
       
-      entry = Tick::Entry.create(
-        task_id: self.task_id,
+      params = {
+        task_id: self.task.id,
         hours: self.time_elapsed_in_hours,
         date: Time.now
-      ) do |result|
+      }.merge!(options)
+      
+      entry = Tick::Entry.create(params) do |result|
         self.clear
-        block.calls(result) if block
+        block.call(result) if block
       end
       
       self

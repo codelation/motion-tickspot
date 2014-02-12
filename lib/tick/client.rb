@@ -3,6 +3,8 @@ module Tick
   class Client < Tick::Base
     attr_accessor :name
     
+    XML_PROPERTIES = %w( id name )
+    
     def self.list(options={}, &block)
       url = "https://#{current_session.company}.tickspot.com/api/clients"
       
@@ -24,16 +26,14 @@ module Tick
         
         client_nodes.each do |client_node|
           client = new
-          client.id = client_node.elementsForName("id").first.stringValue.intValue
-          client.name = client_node.elementsForName("name").first.stringValue
-          
+          client.set_properties_from_xml_node(client_node, XML_PROPERTIES)
           clients << client
         end
         
-        block.call(clients)
+        block.call(clients) if block
       }, failure:lambda{|operation, error|
         current_session.destroy
-        block.call(error)
+        block.call(error) if block
       })
       
       self

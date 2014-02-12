@@ -114,12 +114,18 @@ describe "Tick::Timer" do
   end
   
   it "should be removed from list of timers when the time is submitted" do
-    Tick::Timer.list.length.should.equal 6
+    Tick::Timer.list.length.should.equal 5
     timer = Tick::Timer.list.select{|timer|
       timer.is_paused
     }.first
-    timer.submit!
-    Tick::Timer.list.length.should.equal 5
+    
+    timer.submit! do |result|
+      resume
+    end
+    
+    wait do
+      Tick::Timer.list.length.should.equal 4
+    end
   end
   
 end

@@ -18,8 +18,9 @@ describe "Tick::Entry" do
     @result = nil
     Tick::Entry.create({
       task_id: 1,
-      hours: 10,
-      date: "2014-01-27"
+      hours: 2.5,
+      date: "2008-03-17",
+      notes: "She can't take much more of this Captain"
     }) do |result|
       @result = result
       resume
@@ -28,10 +29,10 @@ describe "Tick::Entry" do
     wait do
       @result.is_a?(Tick::Entry).should.equal true
       @result.task_id.should.equal 1
-      @result.hours.should.equal 10
+      @result.hours.should.equal 2.5
       dateFormatter = NSDateFormatter.new
       dateFormatter.setDateFormat("yyyy-MM-dd")
-      date = dateFormatter.dateFromString("2014-01-27")
+      date = dateFormatter.dateFromString("2008-03-17")
       @result.date.is_a?(NSDate).should.equal true
       @result.date.should.equal date
     end

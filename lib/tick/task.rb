@@ -4,6 +4,9 @@ module Tick
     attr_accessor :billable, :budget, :closed_on, :name, :opened_on, 
                   :position, :project_id, :sum_hours, :user_count
                   
+    XML_PROPERTIES = %w( id billable budget closed_on name 
+                         opened_on position project_id sum_hours user_count )
+                  
     def self.list(options={}, &block)
       url = "https://#{current_session.company}.tickspot.com/api/tasks"
 
@@ -25,23 +28,14 @@ module Tick
 
         task_nodes.each do |task_node|
           task = new
-          task.id         = task_node.elementsForName("id").first.stringValue.intValue
-          task.billable   = task_node.elementsForName("billable").first.stringValue.boolValue
-          task.budget     = task_node.elementsForName("budget").first.stringValue.floatValue
-          task.closed_on  = date_from_string(task_node.elementsForName("closed_on").first.stringValue)
-          task.name       = task_node.elementsForName("name").first.stringValue
-          task.opened_on  = date_from_string(task_node.elementsForName("opened_on").first.stringValue)
-          task.position   = task_node.elementsForName("position").first.stringValue.intValue
-          task.project_id = task_node.elementsForName("project_id").first.stringValue.intValue
-          task.sum_hours  = task_node.elementsForName("sum_hours").first.stringValue.floatValue
-          task.user_count = task_node.elementsForName("user_count").first.stringValue.intValue
+          task.set_properties_from_xml_node(task_node, XML_PROPERTIES)
           tasks << task
         end
 
-        block.call(tasks)
+        block.call(tasks) if block
       }, failure:lambda{|operation, error|
         current_session.destroy
-        block.call(error)
+        block.call(error) if block
       })
 
       self

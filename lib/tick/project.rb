@@ -4,6 +4,9 @@ module Tick
     attr_accessor :budget, :client_id, :client_name, :closed_on,
                   :name, :opened_on, :owner_id, :sum_hours, :tasks,
                   :user_count
+                  
+    XML_PROPERTIES = %w( id budget client_id client_name closed_on created_at 
+                         name opened_on owner_id sum_hours updated_at user_count )
     
     def self.list(options={}, &block)
       url = "https://#{current_session.company}.tickspot.com/api/projects"
@@ -26,18 +29,7 @@ module Tick
         
         project_nodes.each do |project_node|
           project = new
-          project.id          = project_node.elementsForName("id").first.stringValue.intValue
-          project.budget      = project_node.elementsForName("budget").first.stringValue.floatValue
-          project.client_id   = project_node.elementsForName("client_id").first.stringValue.intValue
-          project.client_name = project_node.elementsForName("client_name").first.stringValue
-          project.closed_on   = date_from_string(project_node.elementsForName("closed_on").first.stringValue)
-          project.created_at  = datetime_from_string(project_node.elementsForName("created_at").first.stringValue)
-          project.name        = project_node.elementsForName("name").first.stringValue
-          project.opened_on   = date_from_string(project_node.elementsForName("opened_on").first.stringValue)
-          project.owner_id    = project_node.elementsForName("owner_id").first.stringValue.intValue
-          project.sum_hours   = project_node.elementsForName("sum_hours").first.stringValue.floatValue
-          project.updated_at  = datetime_from_string(project_node.elementsForName("updated_at").first.stringValue)
-          project.user_count  = project_node.elementsForName("user_count").first.stringValue.intValue
+          project.set_properties_from_xml_node(project_node, XML_PROPERTIES)
           
           project.tasks = []
           task_nodes = project_node.elementsForName("tasks").first.elementsForName("task")
@@ -51,10 +43,10 @@ module Tick
           projects << project
         end
         
-        block.call(projects)
+        block.call(projects) if block
       }, failure:lambda{|operation, error|
         current_session.destroy
-        block.call(error)
+        block.call(error) if block
       })
       
       self
