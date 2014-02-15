@@ -6,7 +6,7 @@ module Tick
   class Session < Tick::Base
     attr_accessor :company, :email, :first_name, :last_name, :password
   
-    SERVICE_NAME = "Tick Timer"
+    SERVICE_NAME = "Tick"
   
     def company
       @company ||= storage.objectForKey("company")
