@@ -1,5 +1,8 @@
 module Tick
   
+  class AuthenticationError < Exception
+  end
+  
   class Session < Tick::Base
     attr_accessor :company, :email, :first_name, :last_name, :password
   
@@ -84,7 +87,8 @@ module Tick
         @current.password = params[:password]
         block.call(@current) if block
       }, failure:lambda{|operation, error|
-        block.call(error) if block
+        ap error
+        block.call(nil) if block
       })
       
       self

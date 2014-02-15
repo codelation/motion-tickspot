@@ -67,7 +67,7 @@ module Tick
     
     def submit!(options={}, &block)
       dateFormatter = NSDateFormatter.new
-      dateFormatter.setDateFormat(Tick::DATE_FORMAT)
+      dateFormatter.setDateFormat(DATE_FORMAT)
       
       params = {
         task_id: self.task.id,
@@ -75,7 +75,7 @@ module Tick
         date: Time.now
       }.merge!(options)
       
-      entry = Tick::Entry.create(params) do |result|
+      entry = Entry.create(params) do |result|
         self.clear
         block.call(result) if block
       end

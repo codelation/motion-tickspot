@@ -22,7 +22,7 @@ module Tick
       
       if params[:date].is_a?(NSDate)
         dateFormatter = NSDateFormatter.new
-        dateFormatter.setDateFormat(Tick::DATE_FORMAT)
+        dateFormatter.setDateFormat(DATE_FORMAT)
         params[:date] = dateFormatter.stringFromDate(params[:date])
       end
       
@@ -34,10 +34,9 @@ module Tick
         error = Pointer.new(:object)
         entry_node = xml.nodesForXPath("//entry", error:error).first
         entry = new
-        entry.set_properties_from_xml_node(entry_node, XML_PROPERTIES)
+        entry.set_properties_from_xml_node(entry_node)
         block.call(entry) if block
       }, failure:lambda{|operation, error|
-        current_session.destroy
         block.call(error) if block
       })
       

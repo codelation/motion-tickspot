@@ -32,8 +32,8 @@ module Tick
     attr_accessor :id, :created_at, :updated_at
     attr_reader :api_name, :api_path
     
-    def set_properties_from_xml_node(xml_node, properties)
-      properties.each do |property|
+    def set_properties_from_xml_node(xml_node)
+      self.class::XML_PROPERTIES.each do |property|
         xml_elements = xml_node.elementsForName(property)
         value = xml_elements ? get_xml_element_value(xml_elements.first) : nil
         self.send("#{property}=", value)
@@ -51,10 +51,7 @@ module Tick
     def self.list(options={}, &block)
       url = "https://#{current_session.company}.tickspot.com#{api_path}"
       
-      params = {
-        email: current_session.email,
-        password: current_session.password
-      }.merge!(options)
+      params = authentication_params.merge!(options)
       
       request_manager.GET(url, parameters:params, success:lambda{|operation, result|
         objects = []
@@ -69,13 +66,12 @@ module Tick
         
         xml_nodes.each do |xml_node|
           object = new
-          object.set_properties_from_xml_node(xml_node, self::XML_PROPERTIES)
+          object.set_properties_from_xml_node(xml_node)
           objects << object
         end
         
         block.call(objects) if block
       }, failure:lambda{|operation, error|
-        current_session.destroy
         block.call(error) if block
       })
       
@@ -112,18 +108,29 @@ module Tick
     
     def date_from_string(string)
       dateFormatter = NSDateFormatter.new
-      dateFormatter.setDateFormat(Tick::DATE_FORMAT)
+      dateFormatter.setDateFormat(DATE_FORMAT)
       dateFormatter.dateFromString(string)
     end
     
     def datetime_from_string(string)
       dateFormatter = NSDateFormatter.new
-      dateFormatter.setDateFormat(Tick::DATETIME_FORMAT)
+      dateFormatter.setDateFormat(DATETIME_FORMAT)
       dateFormatter.dateFromString(string)
     end
     
+    def self.authentication_params
+      {
+        email: current_session.email,
+        password: current_session.password
+      }
+    end
+    
     def self.current_session
-      Tick::Session.current
+      if Session.current
+        Session.current
+      else
+        raise AuthenticationError.new("User is not logged in.")
+      end
     end
   
     def self.request_manager

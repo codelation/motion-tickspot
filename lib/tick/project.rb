@@ -11,10 +11,7 @@ module Tick
     def self.list(options={}, &block)
       url = "https://#{current_session.company}.tickspot.com/api/projects"
       
-      params = {
-        email: current_session.email,
-        password: current_session.password
-      }.merge!(options)
+      params = authentication_params.merge!(options)
       
       request_manager.GET(url, parameters:params, success:lambda{|operation, result|
         projects = []
@@ -29,27 +26,43 @@ module Tick
         
         project_nodes.each do |project_node|
           project = new
-          project.set_properties_from_xml_node(project_node, XML_PROPERTIES)
-          
-          project.tasks = []
-          task_nodes = project_node.elementsForName("tasks").first.elementsForName("task")
-          task_nodes.each do |task_node|
-            task = Task.new
-            task.id = task_node.elementsForName("id").first.stringValue.intValue
-            task.name = task_node.elementsForName("name").first.stringValue
-            project.tasks << task
+          project.set_properties_from_xml_node(project_node)
+          project.tasks = get_tasks_from_xml_node(project_node)
+          project.tasks.each do |task|
+            task.project = project
           end
-          
           projects << project
         end
         
         block.call(projects) if block
       }, failure:lambda{|operation, error|
-        current_session.destroy
         block.call(error) if block
       })
       
       self
+    end
+    
+  private
+    
+    def self.get_tasks_from_xml_node(xml_node)
+      tasks = []
+      
+      # Seems to be mixed results when parsing the XML where
+      # sometimes the tasks element doesn't exist
+      tasks_elements = xml_node.elementsForName("tasks")
+      if tasks_elements
+        task_nodes = tasks_elements.first.elementsForName("task")
+      else
+        task_nodes = xml_node.elementsForName("task")
+      end
+      
+      task_nodes.each do |task_node|
+        task = Task.new
+        task.set_properties_from_xml_node(task_node)
+        tasks << task
+      end
+      
+      tasks
     end
     
   end

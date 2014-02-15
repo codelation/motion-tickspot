@@ -81,4 +81,10 @@ describe "Tick::Project" do
     @project.tasks.first.is_a?(Tick::Task).should.equal true
   end
   
+  it "tasks should have the project assigned to them" do
+    @project.tasks.each do |task|
+      task.project.should.equal @project
+    end
+  end
+  
 end
