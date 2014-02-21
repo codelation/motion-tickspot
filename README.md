@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/81designs/motion-tickspot.png?branch=master)](https://travis-ci.org/81designs/motion-tickspot)
 [![Code Climate](https://codeclimate.com/github/81designs/motion-tickspot.png)](https://codeclimate.com/github/81designs/motion-tickspot)
 
-A [RubyMotion](http://www.rubymotion.com) wrapper for the
+A [RubyMotion](http://www.rubymotion.com) wrapper for
 [Tick](http://www.tickspot.com)'s [API](http://www.tickspot.com/api)
 that works on iOS and OS X.
 
