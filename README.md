@@ -1,7 +1,7 @@
 # Motion-Tickspot
 
-[![Build Status](https://travis-ci.org/81designs/motion-tickspot.png?branch=master)](https://travis-ci.org/81designs/motion-tickspot)
-[![Code Climate](https://codeclimate.com/github/81designs/motion-tickspot.png)](https://codeclimate.com/github/81designs/motion-tickspot)
+[![Build Status](https://travis-ci.org/codelation/motion-tickspot.png?branch=master)](https://travis-ci.org/codelation/motion-tickspot)
+[![Code Climate](https://codeclimate.com/github/codelation/motion-tickspot.png)](https://codeclimate.com/github/codelation/motion-tickspot)
 
 A [RubyMotion](http://www.rubymotion.com) wrapper for
 [Tick](http://www.tickspot.com)'s [API](http://www.tickspot.com/api)
