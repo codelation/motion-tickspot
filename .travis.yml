@@ -7,4 +7,4 @@ script: ./travis.sh
 notifications:
   email: false
   webhooks: 
-    secure: "tmjPOy87oMb0m4VTKmBrcxKLwkMmz2gdLy9PWfN+s4b+mnAYE5JFyJq9MjRIVQYfGwp3rQ8lEJv7kpddDcQ1FgIMUu50LHnMdEgNV/52ggXC5OwPiGAPAd4UWAqPyTe7HZpywBC8ZTO79aYV65EGQQW5xzBEm3u9kd/Zai2YSlQ="
+    secure: "LB5lA5zXMHlbPl2ItQ3BWeFgrLg6x02tHRhrHyjeKCIrcXuwky4RqRHbZJu2Yl+OUATER/+6qkUecr7HVHQKujipQHkqHT+JbT+AprE3LyLjdMTZKchpG5w6zTR4QASydne0beLhzmg+b8jI3fUWtqhEllL2sCrNkNHnAo6f00o="
