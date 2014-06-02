@@ -6,7 +6,7 @@ module Tick
     def clear
       self.start_time = nil
       self.time_spans = []
-      self.class.list.delete(self)
+      self.class.timers.delete(self)
       true
     end
 
@@ -52,8 +52,9 @@ module Tick
       # Start the timer and add it to the
       # list of timers if it doesn't exist
       self.start_time = Time.now
-      unless self.class.list.include?(self)
-        self.class.list << self
+      self.class.timers ||= []
+      unless self.class.timers.include?(self)
+        self.class.timers << self
       end
 
       true
@@ -109,31 +110,36 @@ module Tick
       @time_spans ||= []
     end
 
-    def self.current
-      list.select{|timer|
-        timer.is_running
-      }.first
-    end
+    class << self
+      attr_accessor :timers
 
-    def self.list
-      @@list ||= []
-    end
-
-    def self.start_with_task(task)
-      timer = list.select{|timer|
-        timer.task.id == task.id
-      }.first
-
-      if timer.nil?
-        timer = new
-        timer.task = task
+      def current
+        list.select{|timer|
+          timer.is_running
+        }.first
       end
 
-      if timer.is_paused
-        timer.start
+      def list
+        timers || []
       end
 
-      timer
+      def start_with_task(task)
+        timer = list.select{|timer|
+          timer.task.id == task.id
+        }.first
+
+        if timer.nil?
+          timer = new
+          timer.task = task
+        end
+
+        if timer.is_paused
+          timer.start
+        end
+
+        timer
+      end
+
     end
 
   end
