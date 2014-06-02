@@ -54,7 +54,7 @@ module Tick
       self.start_time = Time.now
       self.class.timers ||= []
       unless self.class.timers.include?(self)
-        self.class.timers << self
+        self.class.timers += [self]
       end
 
       true
