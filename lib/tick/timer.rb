@@ -129,6 +129,10 @@ module Tick
         timer.task = task
       end
 
+      if timer.is_paused
+        timer.start
+      end
+
       timer
     end
 
