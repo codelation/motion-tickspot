@@ -7,6 +7,7 @@ module Tick
       self.start_time = nil
       self.time_spans = []
       self.class.timers.delete(self)
+      self.class.timers += [] # Simplify KVO
       true
     end
 
