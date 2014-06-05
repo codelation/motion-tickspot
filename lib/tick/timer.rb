@@ -46,6 +46,7 @@ module Tick
     alias_method :started, :is_running
 
     def start
+      ap "WAAAAT? START PLEASE"
       # Stop the current timer if it exists
       current_timer = self.class.current
       current_timer.stop if current_timer
@@ -53,9 +54,12 @@ module Tick
       # Start the timer and add it to the
       # list of timers if it doesn't exist
       self.start_time = Time.now
-      self.class.timers ||= []
-      unless self.class.timers.include?(self)
-        self.class.timers += [self]
+      unless self.class.timers && self.class.timers.include?(self)
+        if self.class.timers
+          self.class.timers += [self]
+        else
+          self.class.timers = [self]
+        end
       end
 
       true
