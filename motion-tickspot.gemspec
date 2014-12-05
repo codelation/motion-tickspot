@@ -20,7 +20,8 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "motion-cocoapods", "~> 1.7"
-  spec.add_development_dependency "awesome_print_motion", "~> 0.1"
+  spec.add_dependency "motion-keychain", "~> 0.0"
+  spec.add_development_dependency "motion_print", "~> 0.0"
   spec.add_development_dependency "guard-motion", "~> 0.1"
   spec.add_development_dependency "motion-redgreen", "~> 0.1"
   spec.add_development_dependency "RackMotion", "~> 0.3"

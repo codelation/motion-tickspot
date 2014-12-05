@@ -16,7 +16,7 @@ begin
 rescue LoadError
 end
 
-require "awesome_print_motion"
+require "motion_print"
 require "motion-redgreen"
 require "RackMotion"
 

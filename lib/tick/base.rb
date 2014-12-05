@@ -7,7 +7,6 @@ module Tick
 
     def log_in(company, email, password, &block)
       params = {
-        company: company,
         email: email,
         password: password
       }
@@ -32,14 +31,6 @@ module Tick
     attr_accessor :id, :created_at, :updated_at
     attr_reader :api_name, :api_path
 
-    def set_properties_from_xml_node(xml_node)
-      self.class::XML_PROPERTIES.each do |property|
-        xml_elements = xml_node.elementsForName(property)
-        value = xml_elements ? get_xml_element_value(xml_elements.first) : nil
-        self.send("#{property}=", value)
-      end
-    end
-
     def self.api_name
       self.to_s.split('::').last.downcase
     end
@@ -49,62 +40,10 @@ module Tick
     end
 
     def self.list(options={}, &block)
-      url = "https://#{current_session.company}.tickspot.com#{api_path}"
 
-      params = authentication_params.merge!(options)
-
-      request_manager.GET(url, parameters: params, success: ->(operation, result) {
-        objects = []
-
-        # Parse XML
-        error = Pointer.new(:object)
-        xml = GDataXMLDocument.alloc.initWithXMLString(result.to_s, error:error)
-
-        # Create the objects
-        error = Pointer.new(:object)
-        xml_nodes = xml.nodesForXPath("//#{api_name}", error:error)
-
-        xml_nodes.each do |xml_node|
-          object = new
-          object.set_properties_from_xml_node(xml_node)
-          objects << object
-        end
-
-        block.call(objects) if block
-      }, failure: ->(operation, error) {
-        block.call(error) if block
-      })
-
-      self
     end
 
   private
-
-    def get_xml_element_value(xml_element)
-      type = xml_element.attributeForName("type")
-      type = type.stringValue if type
-      case type
-      when "boolean"
-        xml_element.stringValue.boolValue
-      when "date"
-        date_from_string(xml_element.stringValue)
-      when "datetime"
-        datetime_from_string(xml_element.stringValue)
-      when "float"
-        xml_element.stringValue.floatValue
-      when "integer"
-        xml_element.stringValue.intValue
-      else
-        value = xml_element.stringValue
-        if value == "true"
-          true
-        elsif value == "false"
-          false
-        else
-          value
-        end
-      end
-    end
 
     def date_from_string(string)
       dateFormatter = NSDateFormatter.new
@@ -134,16 +73,13 @@ module Tick
     end
 
     def self.request_manager
+      AFNetworkActivityLogger.sharedLogger.startLogging
+      AFNetworkActivityLogger.sharedLogger.setLevel(AFLoggerLevelDebug)
+
       manager = AFHTTPRequestOperationManager.manager
-
-      request_serializer = AFHTTPRequestSerializer.serializer
-      request_serializer.setValue("application/xml", forHTTPHeaderField:"Content-type")
-      manager.requestSerializer = request_serializer
-
-      response_serializer = AFHTTPResponseSerializer.serializer
-      response_serializer.acceptableContentTypes = NSSet.setWithObjects("application/xml", nil)
-      manager.responseSerializer = response_serializer
-
+      manager.requestSerializer = AFJSONRequestSerializer.serializer
+      manager.requestSerializer.setValue("Timer for Tick (brian@codelation.com)", forHTTPHeaderField: "User-Agent")
+      manager.requestSerializer.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
       manager
     end
 
