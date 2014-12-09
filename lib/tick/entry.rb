@@ -1,48 +1,39 @@
 module Tick
-  
+
   class Entry < Tick::Base
-    attr_accessor :billable, :billed, :budget, :client_name,
-                  :date, :hours, :notes, :project_name, :sum_hours, 
-                  :task_id, :task_name, :user_email, :user_id
-                  
-    XML_PROPERTIES = %w( id billable billed budget client_name created_at date hours notes
-                         project_name sum_hours task_id task_name updated_at user_email user_id )
-                         
-    def self.api_path
-      "/api/entries"
+    attr_accessor :date, :hours, :notes, :task_id, :user_id
+
+    JSON_ATTRIBUTES = %w( id created_at date hours notes task_id user_id )
+
+    def date=(value)
+      value = date_from_string(value) if value.is_a?(String)
+      super(value)
     end
-                         
+
+    def self.api_path
+      "/#{current_session.subscription_id}/api/v2/entries"
+    end
+
     def self.create(options={}, &block)
-      url  = "https://#{current_session.company}.tickspot.com/api/create_entry"
-      
-      params = {
-        email: current_session.email,
-        password: current_session.password
-      }.merge!(options)
-      
-      if params[:date].is_a?(NSDate)
+      url = "https://www.tickspot.com#{api_path}.json"
+
+      if options[:date].is_a?(NSDate)
         dateFormatter = NSDateFormatter.new
         dateFormatter.setDateFormat(DATE_FORMAT)
-        params[:date] = dateFormatter.stringFromDate(params[:date])
+        options[:date] = dateFormatter.stringFromDate(options[:date])
       end
-      
-      request_manager.GET(url, parameters:params, success:lambda{|operation, result|
-        error = Pointer.new(:object)
-        xml = GDataXMLDocument.alloc.initWithXMLString(result.to_s, error:error)
-        
-        # Create the entry object from xml
-        error = Pointer.new(:object)
-        entry_node = xml.nodesForXPath("//entry", error:error).first
+
+      request_manager.POST(url, parameters: options, success: ->(operation, result) {
         entry = new
-        entry.set_properties_from_xml_node(entry_node)
+        entry.set_attributes_from_json(result)
+
         block.call(entry) if block
-      }, failure:lambda{|operation, error|
+      }, failure: ->(operation, error) {
         block.call(error) if block
       })
-      
+
       self
     end
-    
   end
-  
+
 end

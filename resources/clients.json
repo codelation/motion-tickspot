@@ -1,0 +1,16 @@
+[
+    {
+        "archive": false,
+        "id": 12,
+        "name": "The Republic",
+        "updated_at": "2014-09-09T13:36:20.000-04:00",
+        "url": "https://www.tickspot.com/api/v2/1/clients/12.json"
+    },
+    {
+        "archive": false,
+        "id": 3,
+        "name": "The Empire",
+        "updated_at": "2014-09-09T13:36:19.000-04:00",
+        "url": "https://www.tickspot.com/api/v2/1/clients/3.json"
+    }
+]

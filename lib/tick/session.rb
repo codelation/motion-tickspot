@@ -4,7 +4,7 @@ module Tick
   end
 
   class Session < Tick::Base
-    attr_accessor :company, :email, :first_name, :last_name, :password
+    attr_accessor :api_token, :email, :password, :roles, :subscription_id
 
     def destroy
       MotionKeychain.remove("email")
@@ -32,26 +32,23 @@ module Tick
       @password
     end
 
-    def self.create(params, &block)
-      manager = request_manager
-      manager.requestSerializer.setAuthorizationHeaderFieldWithUsername(params[:email], password: params[:password])
-      url  = "https://www.tickspot.com/api/v2/roles.json"
+    def roles
+      @roles ||= []
+    end
 
-      manager.GET(url, parameters: nil, success: ->(operation, result) {
-        # # TODO: Save first and last name
-        # @current = new
-        # @current.company = company
-        # @current.email = params[:email]
-        # @current.password = params[:password]
-        # block.call(@current) if block
-        @current = new
-        @current.first_name = result
-        block.call(@current) if block
-      }, failure: ->(operation, error) {
-        mp "ERROR:"
-        mp error.userInfo
-        block.call(nil) if block
-      })
+    def self.create(params, &block)
+      @current.email = params[:email]
+      @current.password = params[:password]
+
+      Tick::Role.list do |roles|
+        if roles
+          @current.roles = roles
+          block.call(@current) if block
+        else
+          self.destroy
+          block.call(nil) if block
+        end
+      end
 
       self
     end
@@ -65,9 +62,8 @@ module Tick
     end
 
     def self.logged_in?
-      (current.company && current.email && current.password) ? true : false
+      (current.email && current.password) ? true : false
     end
-
   end
 
 end

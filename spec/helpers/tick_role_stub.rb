@@ -1,4 +1,4 @@
-class TickClientStub
+class TickRoleStub
 
   def initialize(app)
     @app = app
@@ -13,9 +13,6 @@ class TickClientStub
 
     if request.URL.absoluteString.start_with? "https://www.tickspot.com/api/v2/roles"
       data = File.open("#{NSBundle.mainBundle.resourcePath}/roles.json").read.to_data
-      sleep 0.1
-    elsif request.URL.absoluteString.start_with? "https://www.tickspot.com/15/api/v2/clients"
-      data = File.open("#{NSBundle.mainBundle.resourcePath}/clients.json").read.to_data
       sleep 0.1
     else
       status, headers, data = @app.call(request)

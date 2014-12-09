@@ -1,0 +1,30 @@
+[
+    {
+        "billable": true,
+        "budget": 150.0,
+        "client_id": 12,
+        "created_at": "2014-09-09T13:36:20.000-04:00",
+        "date_closed": "2014-09-10",
+        "id": 16,
+        "name": "Build Death Star",
+        "notifications": false,
+        "owner_id": 3,
+        "recurring": false,
+        "updated_at": "2014-09-09T13:36:20.000-04:00",
+        "url": "https://www.tickspot.com/api/v2/123/projects/16.json"
+    },
+    {
+        "billable": true,
+        "budget": 50.0,
+        "client_id": 3,
+        "created_at": "2014-09-09T13:36:19.000-04:00",
+        "date_closed": null,
+        "id": 4,
+        "name": "Clean Up Alderaan",
+        "notifications": false,
+        "owner_id": 3,
+        "recurring": false,
+        "updated_at": "2014-09-09T13:36:19.000-04:00",
+        "url": "https://www.tickspot.com/api/v2/123/projects/4.json"
+    }
+]

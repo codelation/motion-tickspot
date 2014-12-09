@@ -16,6 +16,7 @@ begin
 rescue LoadError
 end
 
+require "guard/motion"
 require "motion_print"
 require "motion-redgreen"
 require "RackMotion"
