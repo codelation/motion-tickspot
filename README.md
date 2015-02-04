@@ -7,6 +7,10 @@ A [RubyMotion](http://www.rubymotion.com) wrapper for
 [Tick](http://www.tickspot.com)'s [API](http://www.tickspot.com/api)
 that works on iOS and OS X.
 
+## WARNING
+
+This gem is no longer being actively developed. Tick released V2 of their API, which was a step forward in being RESTful and using JSON instead of XML. Unfortunately is was a step backwards when it comes to usability. What was previously accomplished in a single API request now takes multiple requests. You can check out the [api-v2](https://github.com/codelation/motion-tickspot/tree/api-v2) branch, but I'm not proud of it and I really don't like the new API.
+
 ## Installation
 
 Add this line to your application's Gemfile:
